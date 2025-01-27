@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MISIS KO HAPPY BIRTHDAY</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .container {
+            display: flex;
+            width: 200vw; /* Adjusted for 2 pages */
+            height: 100vh;
+            transition: transform 0.8s ease-in-out;
+        }
+
+        .page {
+            width: 100vw;
+            height: 100vh;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .fireworks {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .animated-firework {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: explode 1.5s infinite ease-out;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: scale(0.5);
+                opacity: 1;
+                box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.7);
+            }
+            100% {
+                transform: scale(3);
+                opacity: 0;
+                box-shadow: 0 0 30px 20px rgba(255, 255, 255, 0);
+            }
+        }
+
+        @keyframes particleMovement {
+            0% {
+                transform: scale(1) translate(0, 0);
+            }
+            100% {
+                transform: scale(0) translate(var(--move-x), var(--move-y));
+            }
+        }
+
+        .page-1 {
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 3em;
+            text-shadow: 2px 2px 5px #ff7;
+            position: relative;
+        }
+
+        .misis-ko {
+            position: absolute;
+            bottom: 180px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2em;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-shadow: 2px 2px 5px #ff7;
+        }
+
+        /* Balloons floating up */
+        .balloon-container {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 100%;
+        }
+
+        .balloon {
+            position: absolute;
+            bottom: -70px; /* Start below the screen */
+            width: 50px;
+            height: 70px;
+            background-color: #ff7;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            animation: floatUp 8s infinite ease-in;
+            opacity: 0.9;
+        }
+
+        .balloon:nth-child(odd) {
+            animation-duration: 7s;
+        }
+
+        .balloon:nth-child(even) {
+            animation-duration: 10s;
+        }
+
+        /* Animation for balloons floating upwards */
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+                transform: translateY(-300px) rotate(10deg);
+            }
+            100% {
+                opacity: 0.6;
+                transform: translateY(-600px) rotate(-10deg);
+            }
+        }
+
+        /* Page 2 */
+        .page-2 {
+            color: #333;
+            font-family: Georgia, serif;
+            font-size: 1.5em;
+            background: #28a745;  /* Green background */
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            overflow-y: auto;
+            height: 100%;
+            position: relative;
+        }
+
+        /* Confetti animation */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #ff0;
+            animation: confettiFall 3s linear infinite;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Card container on Page 2 */
+        .card {
+            width: 80%;
+            height: 60%;
+            background: #ffefbf;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scaleY(0);
+            transform-origin: top;
+            transition: transform 1s ease-in-out;
+        }
+
+        .card.open {
+            transform: translate(-50%, -50%) scaleY(1);
+        }
+
+        .card p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            text-align: center;
+            color: #333;
+        }
+
+        .nav-buttons {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-buttons button {
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            background: #ff7;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .nav-buttons button:hover {
+            background: #ffa500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="card">
+        <!-- Page 1 -->
+        <div class="page page-1">
+            <div class="fireworks" id="fireworks"></div>
+            <h1>HAPPY BIRTHDAY</h1>
+            <div class="misis-ko">MISIS KO</div>
+            <div class="balloon-container" id="balloon-container"></div>
+        </div>
+
+        <!-- Page 2 -->
+        <div class="page page-2">
+            <div class="card" id="cardMessage">
+                <p>Dear Misis ko <br>Una sa lahat gusto kitang batiin ng Happy Happy Birthday misis ko enjoy your special day wish you all the best misis ko and always remember na Im here lang always sa tabi mo then always remeber na sayo lang ako always wala kang kaagaw magtiwala ka sakin hindi ko sasayangin yung tiwala mo misis ko at yung mga promises ko sayo wag kang magalala tutupadin ko yun not now misis ko but soon i promise. Pag pasensyahan mo na sana ung Ugali ko minsan ah pero kait ganun mahal kita ayieee(ngiti muna). Sana ung mga promises natin tupadin natin misis ko inaantay ko lng birthday ko para officially na kitang tawaging akin misis ko yun na lng misis ko enjoy you're special  day misis ko sana ma appriciate mo to misis ko "I Loveyou always muahhh"
+                </p>
+            </div>
+            <!-- Confetti Decoration -->
+            <div class="confetti" style="left: 20%; animation-delay: 1s;"></div>
+            <div class="confetti" style="left: 50%; animation-delay: 2s;"></div>
+            <div class="confetti" style="left: 80%; animation-delay: 3s;"></div>
+        </div>
+    </div>
+
+    <div class="nav-buttons">
+        <button onclick="navigate(0)">Page 1</button>
+        <button onclick="navigate(1)">Page 2</button>
+    </div>
+
+    <script>
+        const container = document.getElementById('card');
+        const fireworksContainer = document.getElementById('fireworks');
+        const balloonContainer = document.getElementById('balloon-container');
+        const cardMessage = document.getElementById('cardMessage');
+
+        function navigate(page) {
+            container.style.transform = `translateX(-${page * 100}vw)`;
+
+            if (page === 1) {
+                // Open the card on page 2
+                setTimeout(() => {
+                    cardMessage.classList.add('open');
+                }, 500); // Delay the animation to ensure it's triggered after page transition
+            } else {
+                cardMessage.classList.remove('open');
+            }
+        }
+
+        function createFirework() {
+            const firework = document.createElement('div');
+            firework.classList.add('animated-firework');
+            firework.style.background = `radial-gradient(circle, hsl(${Math.random() * 360}, 100%, 50%), hsl(${Math.random() * 360}, 100%, 50%))`;
+
+            const top = Math.random() * 100;
+            const left = Math.random() * 100;
+            firework.style.top = `${top}%`;
+            firework.style.left = `${left}%`;
+
+            const angle = Math.random() * 360;
+            const distance = Math.random() * 200 + 100;
+            const moveX = Math.cos(angle) * distance;
+            const moveY = Math.sin(angle) * distance;
+
+            firework.style.setProperty('--move-x', `${moveX}px`);
+            firework.style.setProperty('--move-y', `${moveY}px`);
+
+            firework.style.animation = `particleMovement 2s forwards`;
+
+            fireworksContainer.appendChild(firework);
+
+            setTimeout(() => {
+                firework.remove();
+            }, 2000);
+        }
+
+        function createBalloons() {
+            for (let i = 0; i < 20; i++) {
+                const balloon = document.createElement('div');
+                balloon.classList.add('balloon');
+
+                const colors = ['#ff6', '#ff3', '#00f', '#0f0', '#f00', '#ff0'];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                const randomSize = Math.random() * 20 + 50;
+                balloon.style.backgroundColor = randomColor;
+                balloon.style.width = `${randomSize}px`;
+                balloon.style.height = `${randomSize * 1.4}px`;
+
+                balloon.style.left = `${Math.random() * 100}%`;
+
+                const delay = Math.random() * 3;
+                balloon.style.animationDelay = `${delay}s`;
+
+                balloonContainer.appendChild(balloon);
+            }
+        }
+
+        createBalloons();
+
+        setInterval(createFirework, 100);
+    </script>
+</body>
+</html>
+
